@@ -1,4 +1,4 @@
-# Don't Remove Credit Telegram - @Engineers_Babu
+# Don't Remove Credit Telegram - @mrkrsrawat
 from os import environ
 
 API_ID = int(environ.get("API_ID", "27900743"))
