@@ -12,7 +12,7 @@ BOT_TOKEN = "8109523189:AAEMAxVO7YXl3CVnFeTrQDEocQUO0T2Xn6E"
 
 
 # Telegram channel where files will be forwarded
-CHANNEL_USERNAME = "@krsrawat"  # Replace with your channel username
+CHANNEL_USERNAME = "@KRSTXTHTMLHUBB"  # Replace with your channel username
 
 # Initialize Pyrogram Client
 app = Client("my_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
@@ -454,89 +454,9 @@ def download_video(url, output_path):
     subprocess.run(command, shell=True, check=True)
 
 # Command handler for /start
-@app.on_message(filters.command("jaibajrangbali"))
+@app.on_message(filters.command("start"))
 async def start(client: Client, message: Message):
     await message.reply_text("🔘 SEND ME A TXT FILE 🔘 ")
-
-# Start command handler
-@bot.on_message(filters.command(["start"]))
-async def start_command(bot: Client, message: Message):
-    # Send a loading message
-    loading_message = await bot.send_message(
-        chat_id=message.chat.id,
-        text="Loading... ⏳🔄"
-    )
-  
-    # Choose a random image URL
-    random_image_url = random.choice(image_urls)
-    
-    # Caption for the image
-    caption = ("""
-<blockquote>📚 <b>...WELCOME FRIENDS...</b> 📚</blockquote><br><br>
-
-<b>You can have access to download all Non-DRM+Decrypted DRM Bot 🔐 including:</b>
-<blockquote><i>
-   • 📚 Appx Zip
-   • 🎓 Classplus DRM+ NDRM
-   • 🧑‍🏫 PhysicsWallah DRM
-   • 📚 CareerWill + PDF
-   • 🗞️ Khan GS
-   • 🎓 Study Iq DRM
-   • 🚀 APPX + APPX DEC PDF
-   • 📚 Vimeo Protection
-   • 📙 Brightcove Protection
-   • 🗞️ Visionias Protection
-   • 📝 Zoom Video
-   • 📙 All Non DRM+DEC DRM
-   • 📚 MPD URLs if the key is known (e.g., Mpd_url?key=key XX:XX)
-</blockquote></i>
-<b>🚀 You are not subscribed to any plan yet!</b>
-
-<blockquote><i>💵 Monthly Plan: ₹ 300</blockquote></i>
-
-/help <b>to know about all the commonds</b> 📄 <br><br>
-<b>Contact Me</b> [JAI BAJRANG BALI ](http://t.me/krs_study_helper_bbot)<b>to Get The Subscription</b> <br>
-""")
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Initializing Uploader bot... 🤖\n\n"
-        "Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Loading features... ⏳\n\n"
-        "Progress: 🟥🟥⬜⬜⬜⬜⬜⬜ 25%\n\n"
-    )
-    
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "THODA WAIT KARLO FRIENDS! 😊\n\n"
-        "Progress: 🟧🟧🟧🟧⬜⬜⬜⬜ 50%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Checking Bot Status... 🔍\n\n"
-        "Progress: 🟨🟨🟨🟨🟨🟨⬜⬜ 75%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Checking Bot Status... 🔍\n\n"
-        "Progress:🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%\n\n"
-    )
-        
-    # Send the image with caption and buttons
-    await bot.send_photo(
-        chat_id=message.chat.id,
-        photo=random_image_url,
-        caption=caption.format(message.from_user.mention),
-        reply_markup=keyboard
-    )
-
-    # Delete the loading message
-    await loading_message.delete()
 
 # Message handler for file uploads
 @app.on_message(filters.document)
@@ -567,7 +487,7 @@ async def handle_file(client: Client, message: Message):
         f.write(html_content)
 
     # Send the HTML file to the user
-    await message.reply_document(document=html_file_path, caption="✅ 𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n📥 𝐄𝐱𝐭𝐫𝐚𝐜𝐭𝐞𝐝 𝐁𝐲 : 🚩 𝐉𝐀𝐈 𝐁𝐀𝐉𝐑𝐀𝐍𝐆 𝐁𝐀𝐋𝐈 🚩™")
+    await message.reply_document(document=html_file_path, caption="☑️ 𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n🔘 𝐄𝐱𝐭𝐫𝐚𝐜𝐭𝐞𝐝 𝐁𝐲 : 🚩 𝐉𝐀𝐈 𝐁𝐀𝐉𝐑𝐀𝐍𝐆 𝐁𝐀𝐋𝐈 🚩™")
 
     # Forward the .txt file to the channel
     await client.send_document(chat_id=CHANNEL_USERNAME, document=file_path)
