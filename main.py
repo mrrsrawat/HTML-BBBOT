@@ -461,134 +461,6 @@ def download_video(url, output_path):
 
 # Command handler for /start
 @app.on_message(filters.command("start"))
-async def start(client: Client, message: Message):
- # Send a loading message
-    loading_message = await bot.send_message(
-        chat_id=message.chat.id,
-        text="Loading... ⏳🔄"
-    )
-  
-    # Choose a random image URL
-    random_image_url = random.choice(image_urls)
-    
-    # Caption for the image
-    caption = ("""
-<blockquote>📚 <b>...WELCOME FRIENDS...</b> 📚</blockquote><br><br>
-
-<b>You can have access to download HTML FILE all Non-DRM+Decrypted DRM Bot 🔐 including:</b>
-<blockquote><i>
-   • 📚 Appx
-   • 🎓 Classplus DRM+ NDRM
-   • 🧑‍🏫 PhysicsWallah DRM
-   • 📚 CareerWill + PDF
-   • 🗞️ Khan GS
-   • 🎓 Study Iq 
-   • 🚀 APPX + APPX DEC PDF
-   • 📚 Vimeo Protection
-   • 📙 Brightcove Protection
-   • 🗞️ Visionias Protection
-   • 📝 Zoom Video
-   • 📙 All Non DRM+DEC DRM
-   • 📚 MPD URLs if the key is known (e.g., Mpd_url?key=key XX:XX)
-</blockquote></i>
-<b>🚀 You are not subscribed to any plan yet!</b>
-
-<blockquote><i>💵 Monthly Plan: ₹ 300</blockquote></i>
-
-/help <b>to know about all the commonds</b> 📄 <br><br>
-<b>Contact Me</b> [JAI BAJRANG BALI ](http://t.me/krs_study_helper_bbot)<b>to Get The Subscription</b> <br>
-""")
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Initializing Uploader bot... 🤖\n\n"
-        "Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Loading features... ⏳\n\n"
-        "Progress: 🟥🟥⬜⬜⬜⬜⬜⬜ 25%\n\n"
-    )
-    
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "THODA WAIT KARLO FRIENDS! 😊\n\n"
-        "Progress: 🟧🟧🟧🟧⬜⬜⬜⬜ 50%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Checking Bot Status... 🔍\n\n"
-        "Progress: 🟨🟨🟨🟨🟨🟨⬜⬜ 75%\n\n"
-    )
-
-    await asyncio.sleep(1)
-    await loading_message.edit_text(
-        "Checking Bot Status... 🔍\n\n"
-        "Progress:🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%\n\n"
-    )
-        
-    # Send the image with caption and buttons
-    await bot.send_photo(
-        chat_id=message.chat.id,
-        photo=random_image_url,
-        caption=caption.format(message.from_user.mention),
-        reply_markup=keyboard
-    )
-
-    # Delete the loading message
-    await loading_message.delete()
-
-# File paths
-SUBSCRIPTION_FILE = "subscription_data.txt"
-CHANNELS_FILE = "channels_data.json"
-
-# Admin ID
-YOUR_ADMIN_ID = 7804396225
-
-# Function to read subscription data
-def read_subscription_data():
-    if not os.path.exists(SUBSCRIPTION_FILE):
-        return []
-    with open(SUBSCRIPTION_FILE, "r") as f:
-        return [line.strip().split(",") for line in f.readlines()]
-
-# Function to write subscription data
-def write_subscription_data(data):
-    with open(SUBSCRIPTION_FILE, "w") as f:
-        for user in data:
-            f.write(",".join(user) + "\n")
-
-def read_channels_data():
-    if not os.path.exists(CHANNELS_FILE):
-        return []
-    try:
-        with open(CHANNELS_FILE, "r") as file:
-            return json.load(file)
-    except json.JSONDecodeError:
-        print("Error: Channels data contains invalid JSON format.")
-        return []
-    except Exception as error:
-        print(f"Error reading channels data: {error}")
-        return []
-
-def write_channels_data(data):
-    try:
-        with open(CHANNELS_FILE, "w") as file:
-            json.dump(data, file, indent=4)
-    except Exception as error:
-        print(f"Error writing channels data: {error}")
-
-# Admin-only decorator
-def admin_only(func):
-    async def wrapper(client, message: Message):
-        if message.from_user.id != YOUR_ADMIN_ID:
-            await message.reply_text("You are not authorized to use this command.")
-            return
-        await func(client, message)
-    return wrapper
-
-@bot.on_message(filters.command("jaibajrangbali")) # & filters.private)
 async def account_login(bot: Client, m: Message):
     #if m.chat.type == "private":
     user_id = str(m.from_user.id)
@@ -596,7 +468,7 @@ async def account_login(bot: Client, m: Message):
     if not any(user[0] == user_id for user in subscription_data):
         await m.reply_text("❌ You are not a premium user. Please upgrade your subscription! 💎")
         return          
-    editable = await m.reply_text("**Please Send TXT file for download**")
+    editable = await m.reply_text("**Please Send TXT file for download HTML**")
 
 # Message handler for file uploads
 @app.on_message(filters.document)
