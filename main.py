@@ -455,14 +455,33 @@ def download_video(url, output_path):
 
 # Command handler for /start
 @app.on_message(filters.command("start"))
-async def account_login(bot: Client, m: Message):
-    #if m.chat.type == "private":
-    user_id = str(m.from_user.id)
-    subscription_data = read_subscription_data()
-    if not any(user[0] == user_id for user in subscription_data):
-        await m.reply_text("❌ You are not a premium user. Please upgrade your subscription! 💎")
-        return          
-    editable = await m.reply_text("**Please Send TXT file for download HTML**")
+async def start(client: Client, message: Message):
+    await message.reply_text("<blockquote>📚 <b>...WELCOME FRIENDS...</b> 📚</blockquote><br><br>
+
+<b>You can have access to download all Non-DRM+Decrypted DRM Bot 🔐 including:</b>
+<blockquote><i>
+   • 📚 Appx Zip
+   • 🎓 Classplus DRM+ NDRM
+   • 🧑‍🏫 PhysicsWallah DRM
+   • 📚 CareerWill + PDF
+   • 🗞️ Khan GS
+   • 🎓 Study Iq DRM
+   • 🚀 APPX + APPX DEC PDF
+   • 📚 Vimeo Protection
+   • 📙 Brightcove Protection
+   • 🗞️ Visionias Protection
+   • 📝 Zoom Video
+   • 📙 All Non DRM+DEC DRM
+   • 📚 MPD URLs if the key is known (e.g., Mpd_url?key=key XX:XX)
+</blockquote></i>
+<b>🚀 You are not subscribed to any plan yet!</b>
+
+<blockquote><i>💵 Monthly Plan: ₹ 300</blockquote></i>
+
+🔘 FOR DOWNLOAD HTML SEND A TXT FILE 🔘
+
+/help <b>to know about all the commonds</b> 📄 <br><br>
+<b>Contact Me</b> [JAI BAJRANG BALI ](http://t.me/krs_study_helper_bbot)<b>to Get The Subscription</b> <br>")
 
 # Message handler for file uploads
 @app.on_message(filters.document)
