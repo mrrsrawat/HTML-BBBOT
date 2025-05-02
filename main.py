@@ -10,12 +10,6 @@ API_HASH = "ebb06ea8d41420e60b29140dcee902fc"
 BOT_TOKEN = "8109523189:AAEMAxVO7YXl3CVnFeTrQDEocQUO0T2Xn6E"
 
 
-owner_id = [7804396225]
-auth_users = [7804396225 , 7455272483]
-photo1 = 'https://i.ibb.co/XxDwyHJV/file-1258.jpg'
-getstatusoutput(f"wget {photo1} -O 'JAI BAJRANG BALI.jpg'")    
-photo = "JAI BAJRANG BALI.jpg"
-
 
 # Telegram channel where files will be forwarded
 CHANNEL_USERNAME = "@krsrawat"  # Replace with your channel username
