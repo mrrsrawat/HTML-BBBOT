@@ -454,9 +454,25 @@ def download_video(url, output_path):
     subprocess.run(command, shell=True, check=True)
 
 # Command handler for /start
-@app.on_message(filters.command("start"))
+@app.on_message(filters.command("jaibajrangbali"))
 async def start(client: Client, message: Message):
-    await message.reply_text("<blockquote>📚 <b>...WELCOME FRIENDS...</b> 📚</blockquote><br><br>
+    await message.reply_text("🔘 SEND ME A TXT FILE 🔘 ")
+
+# Start command handler
+@bot.on_message(filters.command(["start"]))
+async def start_command(bot: Client, message: Message):
+    # Send a loading message
+    loading_message = await bot.send_message(
+        chat_id=message.chat.id,
+        text="Loading... ⏳🔄"
+    )
+  
+    # Choose a random image URL
+    random_image_url = random.choice(image_urls)
+    
+    # Caption for the image
+    caption = ("""
+<blockquote>📚 <b>...WELCOME FRIENDS...</b> 📚</blockquote><br><br>
 
 <b>You can have access to download all Non-DRM+Decrypted DRM Bot 🔐 including:</b>
 <blockquote><i>
@@ -478,10 +494,49 @@ async def start(client: Client, message: Message):
 
 <blockquote><i>💵 Monthly Plan: ₹ 300</blockquote></i>
 
-🔘 FOR DOWNLOAD HTML SEND A TXT FILE 🔘
-
 /help <b>to know about all the commonds</b> 📄 <br><br>
-<b>Contact Me</b> [JAI BAJRANG BALI ](http://t.me/krs_study_helper_bbot)<b>to Get The Subscription</b> <br>")
+<b>Contact Me</b> [JAI BAJRANG BALI ](http://t.me/krs_study_helper_bbot)<b>to Get The Subscription</b> <br>
+""")
+    await asyncio.sleep(1)
+    await loading_message.edit_text(
+        "Initializing Uploader bot... 🤖\n\n"
+        "Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%\n\n"
+    )
+
+    await asyncio.sleep(1)
+    await loading_message.edit_text(
+        "Loading features... ⏳\n\n"
+        "Progress: 🟥🟥⬜⬜⬜⬜⬜⬜ 25%\n\n"
+    )
+    
+    await asyncio.sleep(1)
+    await loading_message.edit_text(
+        "THODA WAIT KARLO FRIENDS! 😊\n\n"
+        "Progress: 🟧🟧🟧🟧⬜⬜⬜⬜ 50%\n\n"
+    )
+
+    await asyncio.sleep(1)
+    await loading_message.edit_text(
+        "Checking Bot Status... 🔍\n\n"
+        "Progress: 🟨🟨🟨🟨🟨🟨⬜⬜ 75%\n\n"
+    )
+
+    await asyncio.sleep(1)
+    await loading_message.edit_text(
+        "Checking Bot Status... 🔍\n\n"
+        "Progress:🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%\n\n"
+    )
+        
+    # Send the image with caption and buttons
+    await bot.send_photo(
+        chat_id=message.chat.id,
+        photo=random_image_url,
+        caption=caption.format(message.from_user.mention),
+        reply_markup=keyboard
+    )
+
+    # Delete the loading message
+    await loading_message.delete()
 
 # Message handler for file uploads
 @app.on_message(filters.document)
