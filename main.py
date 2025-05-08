@@ -50,10 +50,10 @@ def categorize_urls(urls):
             videos.append((name, new_url))
 
 
-        elif "/master.mpd" in url:
-            vid_id = url.split("/")[-2]
-            new_url = f"https://player.muftukmall.site/?id={vid_id}"
-            videos.append((name, new_url))
+       # elif "/master.mpd" in url:
+         #   vid_id = url.split("/")[-2]
+         #   new_url = f"https://player.muftukmall.site/?id={vid_id}"
+         #   videos.append((name, new_url))
 
         elif ".zip" in url:
             vid_id = url.split("/")[-2]
