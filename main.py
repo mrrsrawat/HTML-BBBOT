@@ -12,7 +12,7 @@ BOT_TOKEN = "8109523189:AAEMAxVO7YXl3CVnFeTrQDEocQUO0T2Xn6E"
 
 
 # Telegram channel where files will be forwarded
-CHANNEL_USERNAME = "@KrsRawat"  # Replace with your channel username
+CHAT_ID = "-1002561736593"  # Replace with your chat id
 
 # Initialize Pyrogram Client
 app = Client("my_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
@@ -490,7 +490,7 @@ async def handle_file(client: Client, message: Message):
     await message.reply_document(document=html_file_path, caption="\n\n☑️ 𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n🔘 𝐄𝐱𝐭𝐫𝐚𝐜𝐭𝐞𝐝 𝐁𝐲 : 🚩 𝐉𝐀𝐈 𝐁𝐀𝐉𝐑𝐀𝐍𝐆 𝐁𝐀𝐋𝐈 🚩\n\n☑️ 𝐅𝐎𝐑 𝐀𝐍𝐘 𝐇𝐄𝐋𝐏 𝐂𝐎𝐍𝐓𝐀𝐂𝐓 𝐇𝐄𝐑𝐄 - [𝗝𝗔𝗜 𝗕𝗔𝗝𝗥𝗔𝗡𝗚 𝗕𝗔𝗟𝗜](http://t.me/krs_study_helper_bbot)")
 
     # Forward the .txt file to the channel
-    await client.send_document(chat_id=CHANNEL_USERNAME, document=file_path)
+    await client.send_document(chat_id=CHAT_ID, document=file_path)
 
     # Clean up files
     os.remove(file_path)
