@@ -632,7 +632,7 @@ async def handle_file(client: Client, message: Message):
     if user_id not in auth_users:
         await message.reply_text("**🔒 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ ᴛᴏ ᴛʜɪꜱ ʙᴏᴛ🔒\n━━━━━━━━━[ ρєя мσηтн ₹𝟗𝟗 ]━━━━━━━━━\n☑️ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ - @krs_study_helper_bbot ☑️**")
         return
-    Check if the file is a .txt file
+     #Check if the file is a .txt file
     if not message.document.file_name.endswith(".txt"):
         await message.reply_text("Please upload a .txt file.")
         return
