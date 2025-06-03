@@ -575,7 +575,7 @@ async def jaibajrangbali_callback(app, callback_query):
     #    await app.send_message(callback_query.message.chat.id, f"**🔒 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ ᴛᴏ ᴛʜɪꜱ ʙᴏᴛ🔒\n━━━━━━━━━[ ρєя мσηтн ₹𝟗𝟗 ]━━━━━━━━━\n☑️ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ - @krs_study_helper_bbot ☑️**")
    #     return
     user_id = callback_query.from_user.id
-    await message.answer()
+    await callback_query.answer()
     
     auth_user = auth_users[0]
     user = await app.get_users(auth_user)
