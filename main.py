@@ -10,6 +10,7 @@ import sys
 import motor
 from mongo.usersdb import get_users, add_user, get_user
 import app
+from vars import auth_users
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from mongo.ban_db import is_banned, ban_user_db, unban_user_db, get_ban_list
 from mongo.plans_db import premium_users
