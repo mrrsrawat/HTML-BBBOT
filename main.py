@@ -574,7 +574,7 @@ async def jaibajrangbali_callback(app, callback_query):
     #if user_id not in user or user_id not in SUDO_USERS:
     #    await app.send_message(callback_query.message.chat.id, f"**🔒 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ ᴛᴏ ᴛʜɪꜱ ʙᴏᴛ🔒\n━━━━━━━━━[ ρєя мσηтн ₹𝟗𝟗 ]━━━━━━━━━\n☑️ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ - @krs_study_helper_bbot ☑️**")
    #     return
-    user_id = message.from_user.id
+    user_id = callback_query.from_user.id
     await message.answer()
     
     auth_user = auth_users[0]
@@ -583,7 +583,7 @@ async def jaibajrangbali_callback(app, callback_query):
 
     
     if user_id not in auth_users:
-        await message.reply_text("**🔒 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ ᴛᴏ ᴛʜɪꜱ ʙᴏᴛ🔒\n━━━━━━━━━[ ρєя мσηтн ₹𝟗𝟗 ]━━━━━━━━━\n☑️ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ - @krs_study_helper_bbot ☑️**")
+        await app.send_message(callback_query.message.chat.id, f"**🔒 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ ᴛᴏ ᴛʜɪꜱ ʙᴏᴛ🔒\n━━━━━━━━━[ ρєя мσηтн ₹𝟗𝟗 ]━━━━━━━━━\n☑️ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ - @krs_study_helper_bbot ☑️**")
         return
     THREADPOOL.submit(asyncio.run, process_jaibajrangbali(app, callback_query.message))
 
