@@ -4,7 +4,7 @@ import requests
 import random
 import asyncio
 import subprocess
-from vars import OWNER_ID, SUDO_USERS, auth_users
+from vars import OWNER_ID, auth_users
 import time
 import sys
 import motor
