@@ -24,7 +24,7 @@ thumb = os.path.join(os.path.dirname(__file__), "logo.jpg")
 # Replace with your API ID, API Hash, and Bot Token
 API_ID = "27900743"
 API_HASH = "ebb06ea8d41420e60b29140dcee902fc"
-BOT_TOKEN = "7613918555:AAEXuAeg_ae5beQJqZydrKN2IzUgCmlTRU0"
+BOT_TOKEN = "8109523189:AAEMAxVO7YXl3CVnFeTrQDEocQUO0T2Xn6E"
 
 
 
