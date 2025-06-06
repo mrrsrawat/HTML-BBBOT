@@ -104,7 +104,9 @@ def group_by_topic(file_list):
         else:
             topic = "Miscellaneous"
             title = name
-        grouped[topic.strip()].append((title.strip(), url))
+        topic = html.escape(topic.strip())
+        title = html.escape(title.strip())  # <- escape used here safely
+        grouped[topic].append((title, url))
     return dict(grouped)
 
 def generate_html(file_name, videos, pdfs, others):
