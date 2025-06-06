@@ -110,13 +110,13 @@ def generate_html(file_name, videos, pdfs, others):
     pdfs_grouped = group_by_topic(pdfs)
 
 
-        video_links = ""
+        video_links = "".join(f'<a href="#" onclick="playVideo(\'{url}\')">{name}</a>' for name, url in videos)
         for topic, items in videos_grouped.items():
             video_links += f'<h3 style="color:#0a0;">{topic}</h3>'
             for title, url in items:
                 video_links += f'<a href="#" onclick="playVideo(\'{url}\')">{title}</a>'
 
-        pdf_links = ""
+        pdf_links = "".join(f'<a href="{url}" target="_blank">{name}</a>' for name, url in pdfs)
         for topic, items in pdfs_grouped.items():
             pdf_links += f'<h3 style="color:#0a0;">{topic}</h3>'
             for title, url in items:
