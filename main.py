@@ -85,24 +85,44 @@ def categorize_urls(urls):
             yt_id = url.split("/")[-1]
             new_url = f"https://www.youtube.com/watch?v={yt_id}"
             
-        elif ".m3u8" in url:
-            videos.append((name, url))
-        elif ".mp4" in url:
-            videos.append((name, url))
-        elif "pdf" in url:
-            pdfs.append((name, url))
-        else:
-            others.append((name, url))
 
     return videos, pdfs, others
+
+
+def group_by_topic(file_list):
+    grouped = defaultdict(list)
+    for name, url in file_list:
+        if ' - ' in name:
+            topic, title = name.split(' - ', 1)
+        else:
+            topic = "Miscellaneous"
+            title = name
+        grouped[topic.strip()].append((title.strip(), url))
+    return dict(grouped)
+
 
 # Function to generate HTML file with Video.js player
 def generate_html(file_name, videos, pdfs, others):
     file_name_without_extension = os.path.splitext(file_name)[0]
 
-    video_links = "".join(f'<a href="#" onclick="playVideo(\'{url}\')">{name}</a>' for name, url in videos)
-    pdf_links = "".join(f'<a href="{url}" target="_blank">{name}</a>' for name, url in pdfs)
-    other_links = "".join(f'<a href="{url}" target="_blank">{name}</a>' for name, url in others)
+    # Automatically group by topic
+    videos_grouped = group_by_topic(videos)
+    pdfs_grouped = group_by_topic(pdfs)
+
+
+        video_links = ""
+        for topic, items in videos_grouped.items():
+            video_links += f'<h3 style="color:#0a0;">{topic}</h3>'
+            for title, url in items:
+                video_links += f'<a href="#" onclick="playVideo(\'{url}\')">{title}</a>'
+
+        pdf_links = ""
+        for topic, items in pdfs_grouped.items():
+            pdf_links += f'<h3 style="color:#0a0;">{topic}</h3>'
+            for title, url in items:
+                pdf_links += f'<a href="{url}" target="_blank">{title}</a>'
+
+        other_links = "".join(f'<a href="{url}" target="_blank">{name}</a>' for name, url in others))
 
     html_template = f"""
 <!DOCTYPE html>
