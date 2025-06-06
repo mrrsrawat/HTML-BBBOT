@@ -6,6 +6,7 @@ import random
 import asyncio
 import subprocess
 from vars import OWNER_ID, auth_users
+from collections import defaultdict
 import time
 import html
 import sys
