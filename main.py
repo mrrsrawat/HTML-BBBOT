@@ -1,11 +1,13 @@
 
 import os
+import re
 import requests
 import random
 import asyncio
 import subprocess
 from vars import OWNER_ID, auth_users
 import time
+import html
 import sys
 import motor
 from mongo.usersdb import get_users, add_user, get_user
@@ -19,6 +21,10 @@ from concurrent.futures import ThreadPoolExecutor
 THREADPOOL = ThreadPoolExecutor(max_workers=1000)
 
 thumb = os.path.join(os.path.dirname(__file__), "logo.jpg")
+
+title = html.escape(title.strip())
+topic = html.escape(topic.strip())
+
 
 # Replace with your API ID, API Hash, and Bot Token
 API_ID = "27900743"
@@ -100,389 +106,191 @@ def group_by_topic(file_list):
         grouped[topic.strip()].append((title.strip(), url))
     return dict(grouped)
 
-
-# Function to generate HTML file with Video.js player
 def generate_html(file_name, videos, pdfs, others):
     file_name_without_extension = os.path.splitext(file_name)[0]
-
-    # Automatically group by topic
     videos_grouped = group_by_topic(videos)
     pdfs_grouped = group_by_topic(pdfs)
 
+    # Video Links
+    video_links = ""
+    for topic, items in videos_grouped.items():
+        video_links += f'<h3 style="color:#0a0;">{topic}</h3>'
+        for title, url in items:
+            video_links += f'<a href="#" onclick="playVideo(\'{url}\')">{title}</a>'
 
-        video_links = "".join(f'<a href="#" onclick="playVideo(\'{url}\')">{name}</a>' for name, url in videos)
-        for topic, items in videos_grouped.items():
-            video_links += f'<h3 style="color:#0a0;">{topic}</h3>'
-            for title, url in items:
-                video_links += f'<a href="#" onclick="playVideo(\'{url}\')">{title}</a>'
+    # PDF Links
+    pdf_links = ""
+    for topic, items in pdfs_grouped.items():
+        pdf_links += f'<h3 style="color:#0a0;">{topic}</h3>'
+        for title, url in items:
+            pdf_links += f'<a href="{url}" target="_blank">{title}</a>'
 
-        pdf_links = "".join(f'<a href="{url}" target="_blank">{name}</a>' for name, url in pdfs)
-        for topic, items in pdfs_grouped.items():
-            pdf_links += f'<h3 style="color:#0a0;">{topic}</h3>'
-            for title, url in items:
-                pdf_links += f'<a href="{url}" target="_blank">{title}</a>'
+    # Other Links
+    other_links = "".join(f'<a href="{url}" target="_blank">{name}</a>' for name, url in others)
 
-        other_links = "".join(f'<a href="{url}" target="_blank">{name}</a>' for name, url in others))
-
-    html_template = f"""
-<!DOCTYPE html>
+    # HTML Template
+    html_template = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{file_name_without_extension}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-    <style>
-        * {{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }}
-
-        body {{
-            background: #94a0b3;
-            color: #333;
-            line-height: 1.6;
-        }}
-
-        .header {{
-            background: #030000;
-            color: red;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }}
-
-        .subheading {{
-            font-size: 16px;
-            margin-top: 10px;
-            color: #faf5f5;
-            font-weight: normal;
-        }}
-
-        .subheading a {{
-            color: #fafafc;
-            text-decoration: none;
-            font-weight: bold;
-        }}
-
-        #video-player {{
-            margin: 20px auto;
-            width: 90%;
-            max-width: 800px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background: #1c1c1c;
-            padding: 10px;
-        }}
-
-        #url-input-container {{
-            display: none;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-        }}
-
-        #url-input-container input {{
-            width: 70%;
-            padding: 10px;
-            border: 2px solid #0a0000;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-right: 10px;
-        }}
-
-        #url-input-container button {{
-            width: 25%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            background: #050000;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }}
-
-        #url-input-container button:hover {{
-            background: #ff0000;
-        }}
-
-        .search-bar {{
-            margin: 20px auto;
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-        }}
-
-        .search-bar input {{
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #080000;
-            border-radius: 5px;
-            font-size: 16px;
-        }}
-
-        .no-results {{
-            color: red;
-            font-weight: bold;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }}
-
-        .container {{
-            display: flex;
-            justify-content: space-around;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 800px;
-        }}
-
-        .tab {{
-            flex: 1;
-            padding: 15px;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            margin: 0 5px;
-        }}
-
-        .tab:hover {{
-            background: #ff0000;
-            color: white;
-            transform: translateY(-5px);
-        }}
-
-        .content {{
-            display: none;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 800px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }}
-
-        .content h2 {{
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #ff0000;
-        }}
-
-        .video-list, .pdf-list, .other-list {{
-            text-align: left;
-        }}
-
-        .video-list a, .pdf-list a, .other-list a {{
-            display: block;
-            padding: 20px;
-            background: #050505;
-            margin: 5px 0;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #ff0011;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }}
-
-        .video-list a:hover, .pdf-list a:hover, .other-list a:hover {{
-            background: #ff0011;
-            color: white;
-            transform: translateX(10px);
-        }}
-
-        .footer {{
-            margin-top: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 15px;
-            background: #1c1c1c;
-            color: white;
-            text-align: center;
-            border-radius: 10px;
-        }}
-
-        .footer a {{
-            color: #f50202;
-            text-decoration: none;
-            font-weight: bold;
-        }}
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{file_name_without_extension}</title>
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+  <style>
+    body {{
+        font-family: Arial, sans-serif;
+        background-color: #e9ecef;
+        color: #333;
+        margin: 0;
+    }}
+    .header {{
+        background-color: #000;
+        color: #ff0000;
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+    }}
+    .subheading {{
+        font-size: 14px;
+        color: white;
+    }}
+    .tab {{
+        padding: 15px;
+        background: #fff;
+        display: inline-block;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }}
+    .tab:hover {{
+        background-color: #ff0000;
+        color: white;
+    }}
+    .content {{
+        display: none;
+        padding: 20px;
+    }}
+    .video-list a, .pdf-list a, .other-list a {{
+        display: block;
+        padding: 10px;
+        background: #000;
+        color: #ff0000;
+        text-decoration: none;
+        margin: 5px 0;
+        border-radius: 5px;
+    }}
+    .video-list a:hover, .pdf-list a:hover, .other-list a:hover {{
+        background: #ff0000;
+        color: white;
+    }}
+    #video-player {{
+        width: 90%;
+        max-width: 800px;
+        margin: 20px auto;
+    }}
+    #custom-url {{
+        margin: 20px auto;
+        text-align: center;
+    }}
+    #custom-url input {{
+        width: 60%;
+        padding: 8px;
+    }}
+    #custom-url button {{
+        padding: 8px 16px;
+        background: #000;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }}
+    .footer {{
+        margin-top: 30px;
+        padding: 10px;
+        background: #1c1c1c;
+        color: white;
+        text-align: center;
+    }}
+  </style>
 </head>
 <body>
-    <div class="header">
-        {file_name_without_extension}
-        <div class="subheading">📥 Extracted By: <a href="https://t.me/="_blank">🚩 𝐉𝐀𝐈 𝐁𝐀𝐉𝐑𝐀𝐍𝐆 𝐁𝐀𝐋𝐈 🚩</a></div>
-    </div>
 
-    <div id="video-player">
-        <video id="jai-bajrangbali-player" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
-            <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a web browser that
-                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-            </p>
-        </video>
-    </div>
+<div class="header">
+  {file_name_without_extension}
+  <div class="subheading">📥 Extracted By: <a href="https://t.me/" target="_blank">🚩 𝐉𝐀𝐈 𝐁𝐀𝐉𝐑𝐀𝐍𝐆 𝐁𝐀𝐋𝐈 🚩</a></div>
+</div>
 
-    <div id="url-input-container">
-        <input type="text" id="url-input" placeholder="Enter video URL to play...">
-        <button onclick="playCustomUrl()">Play</button>
-    </div>
+<div id="video-player">
+  <video id="jai-bajrangbali-player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="360">
+    <source src="" type="application/x-mpegURL" />
+    Your browser does not support the video tag.
+  </video>
+</div>
 
-    <button onclick="toggleUrlInput()" style="margin: 20px auto; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; display: block; width: 90%; max-width: 600px;">Enter Custom URL</button>
+<div id="custom-url">
+  <input type="text" id="url-input" placeholder="Enter video URL">
+  <button onclick="playCustomUrl()">Play</button>
+</div>
 
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search for videos, PDFs, or other resources..." oninput="filterContent()">
-    </div>
+<div class="tabs" style="text-align:center;">
+  <div class="tab" onclick="showContent('videos')">Videos</div>
+  <div class="tab" onclick="showContent('pdfs')">PDFs</div>
+  <div class="tab" onclick="showContent('others')">Others</div>
+</div>
 
-    <div id="noResults" class="no-results">No results found.</div>
+<div id="videos" class="content">
+  <h2>All Videos</h2>
+  <div class="video-list">{video_links}</div>
+</div>
 
-    <div class="container">
-        <div class="tab" onclick="showContent('videos')">Videos</div>
-        <div class="tab" onclick="showContent('pdfs')">PDFs</div>
-        <div class="tab" onclick="showContent('others')">Others</div>
-    </div>
+<div id="pdfs" class="content">
+  <h2>All PDFs</h2>
+  <div class="pdf-list">{pdf_links}</div>
+</div>
 
-    <div id="videos" class="content">
-        <h2>All Video Lectures</h2>
-        <div class="video-list">
-            {video_links}
-        </div>
-    </div>
+<div id="others" class="content">
+  <h2>Other Files</h2>
+  <div class="other-list">{other_links}</div>
+</div>
 
-    <div id="pdfs" class="content">
-        <h2>All PDFs</h2>
-        <div class="pdf-list">
-            {pdf_links}
-        </div>
-    </div>
+<div class="footer">
+  🚩 Extracted By: <a href="https://t.me/" target="_blank">𝐉𝐀𝐈 𝐁𝐀𝐉𝐑𝐀𝐍𝐆 𝐁𝐀𝐋𝐈</a>
+</div>
 
-    <div id="others" class="content">
-        <h2>Other Resources</h2>
-        <div class="other-list">
-            {other_links}
-        </div>
-    </div>
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+<script>
+  const player = videojs('jai-bajrangbali-player');
 
-    <div class="footer">Extracted By - <a href="https://t.me/" target="_blank">🚩 𝐉𝐀𝐈 𝐁𝐀𝐉𝐑𝐀𝐍𝐆 𝐁𝐀𝐋𝐈 🚩</a></div>
+  function playVideo(url) {{
+    if (url.includes('.m3u8')) {{
+        player.src({{ type: 'application/x-mpegURL', src: url }});
+        player.play();
+    }} else {{
+        window.open(url, '_blank');
+    }}
+  }}
 
-    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-    <script>
-        const player = videojs('jai-bajrangbali-player', {{
-            controls: true,
-            autoplay: false,
-            preload: 'auto',
-            fluid: true,
-            controlBar: {{
-                children: [
-                    'playToggle',
-                    'volumePanel',
-                    'currentTimeDisplay',
-                    'timeDivider',
-                    'durationDisplay',
-                    'progressControl',
-                    'liveDisplay',
-                    'remainingTimeDisplay',
-                    'customControlSpacer',
-                    'playbackRateMenuButton',
-                    'chaptersButton',
-                    'descriptionsButton',
-                    'subsCapsButton',
-                    'audioTrackButton',
-                    'fullscreenToggle'
-                ]
-            }}
-        }});
+  function playCustomUrl() {{
+    const url = document.getElementById("url-input").value;
+    if (url) playVideo(url);
+  }}
 
-        function playVideo(url) {{
-            if (url.includes('.m3u8')) {{
-                document.getElementById('video-player').style.display = 'block';
-                player.src({{ src: url, type: 'application/x-mpegURL' }});
-                player.play().catch(() => {{
-                    window.open(url, '_blank');
-                }});
-            }} else {{
-                window.open(url, '_blank');
-            }}
-        }}
+  function showContent(id) {{
+    document.querySelectorAll(".content").forEach(el => el.style.display = "none");
+    document.getElementById(id).style.display = "block";
+  }}
 
-        function toggleUrlInput() {{
-            const urlInputContainer = document.getElementById('url-input-container');
-            urlInputContainer.style.display = urlInputContainer.style.display === 'none' ? 'block' : 'none';
-        }}
+  // Show videos by default
+  document.addEventListener("DOMContentLoaded", () => {{
+    showContent("videos");
+  }});
+</script>
 
-        function playCustomUrl() {{
-            const url = document.getElementById('url-input').value;
-            if (url) {{
-                playVideo(url);
-            }}
-        }}
-
-        function showContent(tabName) {{
-            const contents = document.querySelectorAll('.content');
-            contents.forEach(content => {{
-                content.style.display = 'none';
-            }});
-            const selectedContent = document.getElementById(tabName);
-            if (selectedContent) {{
-                selectedContent.style.display = 'block';
-            }}
-            filterContent();
-        }}
-
-        function filterContent() {{
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const categories = ['videos', 'pdfs', 'others'];
-            let hasResults = false;
-
-            categories.forEach(category => {{
-                const items = document.querySelectorAll(`#${{category}} .${{category}}-list a`);
-                let categoryHasResults = false;
-
-                items.forEach(item => {{
-                    const itemText = item.textContent.toLowerCase();
-                    if (itemText.includes(searchTerm)) {{
-                        item.style.display = 'block';
-                        categoryHasResults = true;
-                        hasResults = true;
-                    }} else {{
-                        item.style.display = 'none';
-                    }}
-                }});
-
-                const categoryHeading = document.querySelector(`#${{category}} h2`);
-                if (categoryHeading) {{
-                    categoryHeading.style.display = categoryHasResults ? 'block' : 'none';
-                }}
-            }});
-
-            const noResultsMessage = document.getElementById('noResults');
-            if (noResultsMessage) {{
-                noResultsMessage.style.display = hasResults ? 'none' : 'block';
-            }}
-        }}
-
-        document.addEventListener('DOMContentLoaded', () => {{
-            showContent('videos');
-        }});
-    </script>
 </body>
 </html>
-    """
+"""
     return html_template
+
 
 # Function to download video using FFmpeg
 def download_video(url, output_path):
