@@ -30,7 +30,7 @@ topic = html.escape(topic.strip())
 # Replace with your API ID, API Hash, and Bot Token
 API_ID = "27900743"
 API_HASH = "ebb06ea8d41420e60b29140dcee902fc"
-BOT_TOKEN = "8109523189:AAEMAxVO7YXl3CVnFeTrQDEocQUO0T2Xn6E"
+BOT_TOKEN = "7945865890:AAGEvzgAhbyODr4jshy8yV5WNJ6UjU5-Zm4"
 
 
 
