@@ -228,8 +228,10 @@ async def txt_to_html(client, message: Message):
     os.remove(file)
     os.remove(html_path)
 
-    @app.on_message()
+# ✅ Correct — inside a registered handler
+@app.on_message(filters.command("start"))
 async def handler(_, message):
-    await message.reply("✅ Bot is working!")
+    await message.reply("Bot working fine.")
+
 
 app.run()
