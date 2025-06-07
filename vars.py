@@ -1,9 +1,10 @@
 # Don't Remove Credit Telegram - @mrkrsrawat
 import os
 
-API_ID = int(os.environ.get("27900743"))
-API_HASH = os.environ.get("ebb06ea8d41420e60b29140dcee902fc")
-BOT_TOKEN = os.environ.get("7609528498:AAGqcl_h-Cygc4v_oiXqD4cbp-yGypVcakY")
+
+API_ID = int(os.environ.get("API_ID", "27900743"))
+API_HASH = os.environ.get("API_HASH", "ebb06ea8d41420e60b29140dcee902fc")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "7609528498:AAGqcl_h-Cygc4v_oiXqD4cbp-yGypVcakY")
 HTML_LOG_CHANNEL = int(os.environ.get("HTML_LOG_CHANNEL", "-1002328169351"))
 
 
