@@ -5,7 +5,7 @@ from collections import defaultdict
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from vars import HTML_LOG_CHANNEL
+from vars import API_ID, API_HASH, BOT_TOKEN, HTML_LOG_CHANNEL
 
 
 def extract_names_and_urls(file_content):
