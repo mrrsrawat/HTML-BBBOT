@@ -1,10 +1,7 @@
+# app.py
 from flask import Flask
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-    return 'Tech VJ'
-
-
-if __name__ == "__main__":
-    app.run()
+def home():
+    return "Bot is Running!"
