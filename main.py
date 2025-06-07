@@ -5,7 +5,11 @@ from collections import defaultdict
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from vars import API_ID, API_HASH, BOT_TOKEN, HTML_LOG_CHANNEL
+from pyrogram import Client
+from vars import API_ID, API_HASH, BOT_TOKEN
+
+app = Client("MyBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+
 
 
 def extract_names_and_urls(file_content):
@@ -223,3 +227,9 @@ async def txt_to_html(client, message: Message):
 
     os.remove(file)
     os.remove(html_path)
+
+    @app.on_message()
+async def handler(_, message):
+    await message.reply("✅ Bot is working!")
+
+app.run()
