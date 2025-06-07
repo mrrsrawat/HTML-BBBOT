@@ -5,10 +5,15 @@ from collections import defaultdict
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from pyrogram import Client
 from vars import API_ID, API_HASH, BOT_TOKEN
 
-app = Client("MyBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+app = Client(
+    "bot",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN
+)
+
 
 
 
